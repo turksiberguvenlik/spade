@@ -61,4 +61,4 @@ def msfhandler(payload,LHOST,LPORT):
 	fhandle.write("set ExitOnSession false\n")
 	fhandle.write("exploit -j\n")
 	fhandle.close()
-	os.system('msfconsole -r msf.rc')
+	os.system('msfconsole -qr msf.rc')
