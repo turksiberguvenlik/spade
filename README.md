@@ -11,6 +11,8 @@ Quick and handy APK backdoor embedder with metasploit android payloads.
 
 ###### Requirements
 * [metasploit](https://www.metasploit.com/)
+* libraries - lib32stdc++6, lib32ncurses5 and lib32z1.
+
 
 
 ###### Installation and execution
