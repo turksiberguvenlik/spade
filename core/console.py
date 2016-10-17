@@ -71,7 +71,14 @@ def initstuff():
 			print(pyc.Err("File(%s) doesnt exist"%(path)))
 			sys.exit()
 			
-		z=os.system('cp %s %s'%(path, mainapk))
+		z=1
+		for sd, d, f in os.walk('./'):
+			for i in f:
+				#print len(mainapk),mainapk,len(i), i
+				if i==mainapk:
+					z=0
+		if(z):z=os.system('cp %s %s'%(path, mainapk))
+
 		if not (z):
 			pass
 		else:
