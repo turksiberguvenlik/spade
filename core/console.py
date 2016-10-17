@@ -74,7 +74,6 @@ def initstuff():
 		z=1
 		for sd, d, f in os.walk('./'):
 			for i in f:
-				#print len(mainapk),mainapk,len(i), i
 				if i==mainapk:
 					z=0
 		if(z):z=os.system('cp %s %s'%(path, mainapk))
